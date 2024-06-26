@@ -1,0 +1,25 @@
+/* styles.css */
+.custom-dropdown-button {
+  background-color: #e6fffa; /* Match the navbar background color */
+  color: #2d3748; /* Text color */
+  border: none; /* Remove border */
+}
+
+.custom-dropdown-button:hover,
+.custom-dropdown-button:focus,
+.custom-dropdown-button:active,
+.custom-dropdown-button.show,
+.custom-dropdown-button:focus-visible {
+  background-color: #b2f5ea; /* Hover background color */
+  color: #2d3748; /* Hover text color */
+}
+
+.custom-dropdown-item {
+  color: #2d3748; /* Dropdown item text color */
+}
+
+.custom-dropdown-item:hover,
+.custom-dropdown-item:focus {
+  background-color: #b2f5ea; /* Dropdown item hover background color */
+  color: #2d3748; /* Dropdown item hover text color */
+}
