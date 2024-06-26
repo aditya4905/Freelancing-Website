@@ -44,7 +44,6 @@ router.post('/addChat/:id', async (req, res) => {
           { your_username: sender,my_username: id1 }
         ]
       });
-  
       // Ensure content is provided
       if (!content) {
         return res.status(400).json({ message: 'Content is required' });

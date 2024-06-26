@@ -3,6 +3,9 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
+import img1 from "./img1.jpg";
+import img2 from "./img2.jpg";
+import img3 from "./img3.jpg";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,21 +31,21 @@ function Home() {
           <div className="">
             <img
               className="h-full w-full object-cover"
-              src="./img3.jpg"
+              src={img3}
               alt="Slide 1"
             />
           </div>
           <div className="">
             <img
               className="h-full w-full object-cover"
-              src="./img2.jpg"
+              src={img2}
               alt="Slide 2"
             />
           </div>
           <div className="">
             <img
               className="h-full w-full object-cover"
-              src="./img1.jpg"
+              src={img1}
               alt="Slide 3"
             />
           </div>
