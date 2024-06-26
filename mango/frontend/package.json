@@ -2,7 +2,7 @@
   "name": "mango",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://<aditya4905>.github.io/<Freelancing-Website>",
+  "homepage": "https://aditya4905.github.io/Freelancing-Website",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
