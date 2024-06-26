@@ -1,18 +1,21 @@
 {
   "files": {
     "main.css": "/Freelancing-Website/static/css/main.0288bbad.css",
-    "main.js": "/Freelancing-Website/static/js/main.bcb841bc.js",
+    "main.js": "/Freelancing-Website/static/js/main.1357e8f8.js",
     "static/js/453.212f24a3.chunk.js": "/Freelancing-Website/static/js/453.212f24a3.chunk.js",
+    "static/media/img2.jpg": "/Freelancing-Website/static/media/img2.1dcd0254edb3eb68dda6.jpg",
+    "static/media/img3.jpg": "/Freelancing-Website/static/media/img3.467c73ace45e57b1d4ca.jpg",
+    "static/media/img1.jpg": "/Freelancing-Website/static/media/img1.e20f9b2449398b4c5dd1.jpg",
     "static/media/pro.svg": "/Freelancing-Website/static/media/pro.a70c29e748a04d488c2dffd02004d5b5.svg",
     "static/media/right.png": "/Freelancing-Website/static/media/right.0e163e83492acb677d72.png",
     "static/media/wrong.png": "/Freelancing-Website/static/media/wrong.0b9e8ab4730aecac43a9.png",
     "index.html": "/Freelancing-Website/index.html",
     "main.0288bbad.css.map": "/Freelancing-Website/static/css/main.0288bbad.css.map",
-    "main.bcb841bc.js.map": "/Freelancing-Website/static/js/main.bcb841bc.js.map",
+    "main.1357e8f8.js.map": "/Freelancing-Website/static/js/main.1357e8f8.js.map",
     "453.212f24a3.chunk.js.map": "/Freelancing-Website/static/js/453.212f24a3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0288bbad.css",
-    "static/js/main.bcb841bc.js"
+    "static/js/main.1357e8f8.js"
   ]
 }
