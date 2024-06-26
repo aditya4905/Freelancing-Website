@@ -1,28 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./Navbar";
-
+import ChatIcon from "./ChatIcon"
+import useAuth from "./useauth";
 const ShowProfile = () => {
+  const { curr, whichUser, loading, setCurr, setWhichUser } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
   const [edit, setEdit] = useState(false);
   const [editedFields, setEditedFields] = useState({
-    skills: [],project_ids:[]
+    skills: [],
+    project_ids: [],
   });
 
-   const [rating2, setRating2] = useState(0); // cooment this line after backend integration
-
+  const [rating2, setRating2] = useState(0); 
 
   useEffect(() => {
+    if (curr == id) {
+      navigate("/myprofile/" + id);
+      return;
+    }
     const fetchData = async () => {
       try {
-        console.log(id);
-        if (localStorage.getItem("user") === id) {
-          navigate("/myprofile/" + id);
-          return;
-        }
-        let client=localStorage.getItem('user');
-        let current_user ={ client};
+        let client = curr;
+        let current_user = { client };
         const response = await fetch(`http://localhost:5000/myprofile/${id}`, {
           method: "POST",
           headers: {
@@ -32,14 +33,13 @@ const ShowProfile = () => {
         });
 
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         if (data.flag === 2) {
-          console.log("dfiojofsd");
           navigate("/login");
         }
         setEditedFields(data.result);
-        setRating2(data.rating_given)
-        console.log(rating2)
+        setRating2(data.rating_given);
+        console.log(rating2);
       } catch (error) {
         console.error(error);
         alert("Could not fetch user data");
@@ -47,25 +47,23 @@ const ShowProfile = () => {
     };
 
     fetchData();
-  }, []);
-
-  const whichUser = localStorage.getItem("flag"); 
+  }, [curr,id,navigate]);
 
   const handleRating = async (rating) => {
-       const user = localStorage.getItem("user");
-       if (!user) {
-         alert("Login First");
-             return;
-       }
-       setRating2(rating)
-      //  console.log(rating2);  
-       let r={rating,id,user};
+    const user = curr;
+    if (!user) {
+      alert("Login First");
+      return;
+    }
+    setRating2(rating);
+    //  console.log(rating2);
+    let r = { rating, id, user };
 
     try {
       await fetch("http://localhost:5000/rateit", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(r),
       });
@@ -79,7 +77,7 @@ const ShowProfile = () => {
   };
 
   const handleAssignProject = () => {
-        navigate("/assignproject/"  + id);
+    navigate("/assignproject/" + id);
   };
 
   return (
@@ -164,13 +162,12 @@ const ShowProfile = () => {
               Skills:
             </label>
             {editedFields.skills ? (
-                <div className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
-                  {editedFields.skills.join(", ")}
-                </div>   
+              <div className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
+                {editedFields.skills.join(", ")}
+              </div>
             ) : (
               <span className="text-gray-700">Loading...</span>
             )}
-
           </div>
           <hr className="mb-4" />
 
@@ -227,14 +224,9 @@ const ShowProfile = () => {
           <hr className="mb-4" />
         </div>
       </div>
+      <ChatIcon />
     </>
   );
 };
 
 export default ShowProfile;
-
-
-
-
-
-

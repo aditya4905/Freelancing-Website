@@ -6,7 +6,7 @@ const ViewProject = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [data, setData] = useState({});
-  console.log("vhsfjg");  
+  const [d ,setD] = useState({});
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -17,23 +17,18 @@ const ViewProject = () => {
           },
         });
         const responseData = await response.json();
-        console.log(response.result);
-        console.log(responseData);
         if (!responseData) {
           alert(responseData.message);
           navigate("/home");
         } else {
-            // console.log('jkakngajk;s');  
-            // data.name = responseData.name;
-            // data.date = responseData.date;
-          setData(responseData);
+          console.log(responseData.result)
+          setD(responseData);
+          setData(responseData.result);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        // You might want to handle this error more gracefully
       }
     };
-
     fetchData();
   }, []);
 
@@ -62,7 +57,7 @@ const ViewProject = () => {
               Deadline:
             </label>
             <div className="border border-gray-300 rounded py-2 px-3 w-full">
-              {data.date}
+              {d.day} - {d.month} - {d.year}
             </div>
           </div>
 

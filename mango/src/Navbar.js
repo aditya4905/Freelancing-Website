@@ -2,24 +2,30 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userPro from "./user.png";
 import proimage from "./pro.svg";
-
+import useAuth from "./useauth";
+import Cookies from "js-cookie";
+import { useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import bell from "./bell.png"; // Import the bell icon
+import rightIcon from "./right.png"; // Import the accept icon
+import wrongIcon from "./wrong.png"; // Import the reject icon
+import "./style.css";
 const Navbar = () => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const curr = localStorage.getItem("user");
-  const whichUser = localStorage.getItem("flag");
-
-  const isLoggedIn = curr ? true : false;
-
-  let ProfileLink;
-  console.log(whichUser);  
-  if (whichUser !== "1") ProfileLink = "../profile/" + curr;
-  else ProfileLink = "../ProfileClient/" + curr;
-
+  const { curr, whichUser, loading, setCurr, setWhichUser } = useAuth();
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const [isNotificationsDropdownOpen, setIsNotificationsDropdownOpen] =
+    useState(false);
+  // const [notifications, setNotifications] = useState([]);
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-
+ useEffect(()=>{
+  fetchNotifications();
+ },[curr]);
   const handleServiceClick = (service) => {
     navigate("../developers/" + service);
     console.log("Selected service:", service);
@@ -29,86 +35,231 @@ const Navbar = () => {
     navigate("../login");
   };
 
-  const handleClicklogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("flag");
-    navigate("../home");
+  const handleClicklogout = async () => {
+    setCurr(null); // Update state in useAuth
+    setWhichUser(null); // Update state in useAuth
+    await Cookies.remove("jwt");
+    navigate("./");
   };
 
-  return (
-    <div className="sticky h-2/12 top-0 z-50 bg-teal-100 flex justify-between items-center">
-      <div className="pl-10">
-        {/* Adjusted img tag */}
-        <a href="/home">
-          <img
-            src={proimage}
-            className="w-40 h-40 cursor-pointer "
-            alt="Logo"
-          />
-        </a>
-      </div>
+  const fetchNotifications = async () => {
+    if (whichUser == 2) {
+      try{
+        const response = await fetch("http://localhost:5000/fetchproject", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({id : curr}), //send syntax
+      });
+      const data = await response.json();
+      setNotifications(data.response);
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+   } else {
+      // Non-client notifications
+      // fetch("/api/freelancer/notifications") // Replace with your freelancer notifications endpoint
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     setNotifications(data.notifications);
+      //   })
+      //   .catch(error => {
+      //     console.error("Error fetching freelancer notifications:", error);
+      //   });
+    }
+  };
 
-      <div className="flex mr-3">
+  const [notifications, setNotifications] = useState([]);
+  const handleNotificationsDropdownToggle = () => {
+    if(isNotificationsDropdownOpen==0)fetchNotifications();
+    setIsNotificationsDropdownOpen(!isNotificationsDropdownOpen);
+  };
+ 
+  const handleViewProject = (id) => {
+    navigate("../viewproject/" + id);
+  };
+
+  const handleAccept = async (id) => {
+    console.log(`Accepted project with id: ${id}`);    
+    try{
+
+        handleNotificationsDropdownToggle();
+        const data = { username: curr, id };
+        const response = await fetch("http://localhost:5000/accept", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({data}), //send syntax
+      });      
+      fetchNotifications();
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+    
+    // sendNotificationToClient(id, "accept");
+    // transfer this project from pending to accepted category ......
+  };
+  const handleReject = async (id) => {
+    console.log(`Rejected project with id: ${id}`);
+    try{
+        handleNotificationsDropdownToggle();
+        const data = { username: curr, id };
+        const response = await fetch("http://localhost:5000/reject", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({data}), //send syntax
+      });
+    }catch(err)
+    {
+      console.log(err);
+    }
+        
+    // Send reject notification to client
+
+    //sendNotificationToClient(id, "reject");
+  };
+
+  // const sendNotificationToClient = (projectId, action) => {
+  //   // Replace this with your actual notification sending logic to the client
+  //   fetch(`/api/sendNotification/${projectId}/${action}`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       projectId,
+  //       action,
+  //     }),
+  //   })
+  //     .then(response => {
+  //       if (response.ok) {
+  //         console.log(`Notification sent to client for project ${projectId} (${action})`);
+  //         // Optionally update UI to reflect notification sent
+  //       } else {
+  //         console.error(`Failed to send notification to client for project ${projectId}`);
+  //         // Handle error scenario
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.error("Error sending notification:", error);
+  //       // Handle error scenario
+  //     });
+  // };
+
+  const isLoggedIn = curr ? true : false;
+  let ProfileLink =
+    whichUser != 1 ? `../profile/${curr}` : `../ProfileClient/${curr}`;
+
+  return (
+    <div className="sticky top-0 z-50 bg-teal-100 flex justify-between items-center h-20 shadow-md px-6">
+      <div className="flex items-center space-x-6">
+        <a href="/home">
+          <img src={proimage} className="w-16 h-16 cursor-pointer" alt="Logo" />
+        </a>
         <a
-          className="mr-5 text-2xl text-gray-800 hover:text-blue-600"
+          className="text-xl font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300"
           href="/home"
         >
           Home
         </a>
-        {/* <a className="ml-5 text-2xl mr-5 cursor-pointer text-gray-800 hover:text-blue-600">
-          Premium
-        </a> */}
-        {/* Dropdown for Services */}
-        <div
-          className="relative ml-5"
-          onMouseEnter={handleDropdownToggle}
-          onMouseLeave={handleDropdownToggle}
+        <DropdownButton
+          id="dropdown-basic-button"
+          title="Services"
+          className="custom-dropdown"
         >
-          <div className="text-2xl cursor-pointer outline-none focus:outline-none hover:text-blue-600">
-            Services
-          </div>
-          {isDropdownOpen && (
-            <div className="absolute  shadow-lg rounded-md bg-white">
-              <ul className="py-1 px-4 z-200">
-                <li
-                  className=" py-2 cursor-pointer hover:bg-blue-200"
-                  onClick={() => handleServiceClick("WebDeveloper")}
-                >
-                  Web Developer
-                </li>
-                <li
-                  className=" py-2 cursor-pointer hover:bg-gray-200"
-                  onClick={() => handleServiceClick("AppDeveloper")}
-                >
-                  App Developer
-                </li>
-                <li
-                  className=" py-2 cursor-pointer hover:bg-gray-200"
-                  onClick={() => handleServiceClick("LogoMaking")}
-                >
-                  Logo Making
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
+          <Dropdown.Item onClick={() => handleServiceClick("WebDeveloper")}>
+            Web Developer
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handleServiceClick("AppDeveloper")}>
+            App Developer
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handleServiceClick("LogoMaking")}>
+            Logo Making
+          </Dropdown.Item>
+        </DropdownButton>
       </div>
 
-      <div className="p-4">
+      <div className="flex items-center space-x-6">
+        {isLoggedIn && whichUser == 2 && (
+  <div className="relative">
+    <img 
+      src={bell} 
+      className="h-8 w-8 cursor-pointer" 
+      alt="Notifications" 
+      onClick={handleNotificationsDropdownToggle} 
+    />
+    {notifications.length > 0 && (
+      <span className="absolute top-0 right-0 inline-block w-4 h-4 text-xs font-bold leading-tight text-center text-white bg-red-500 rounded-full">
+        {notifications.length}
+      </span>
+    )}
+    {isNotificationsDropdownOpen && (
+      <div className="absolute right-0 mt-2 w-56 bg-teal-100 border border-gray-200 rounded-lg shadow-lg">
+        <ul className="py-1">
+          {notifications.map((notification) => (
+            <li
+              key={notification._id}
+              className="py-2  pr-3 flex justify-between items-center cursor-pointer hover:bg-teal-200"
+              onClick={() => handleViewProject(notification._id)}
+            >
+              <span className="text-lg font-medium">{notification.name}</span>
+              <span className="flex space-x-1">
+                {whichUser !== "1" ? (
+                  <React.Fragment>
+                    <img
+                      src={rightIcon}
+                      className="h-6 w-6 cursor-pointer transform hover:scale-110 transition duration-200 mr-3"
+                      alt="Accept"
+
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAccept(notification._id);
+                      }}
+                    />
+                    <img
+                      src={wrongIcon}
+                      className="h-7 w-7 cursor-pointer transform hover:scale-110 transition duration-200 mr-2 ml-1"
+                      alt="Reject"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleReject(notification._id);
+                      }}
+                    />
+                  </React.Fragment>
+                ) : (
+                  <span className="text-lg font-medium">Current State: {notification.currentCode}</span>
+                )}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </div>
+)}
+          
         {isLoggedIn ? (
-          <div className="flex justify-center items-center">
-            <div className="flex flex-col items-center">
-              <img
-                src={userPro}
-                alt="Profile"
-                className="rounded-full h-12 w-14 cursor-pointer pr-4 mb-2"
-              />
-              <a className="text-blue-900 underline" href={ProfileLink}>
-                {curr}
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <a href={ProfileLink}>
+                <img
+                  src={userPro}
+                  alt="Profile"
+                  className="rounded-full h-12 w-12 cursor-pointer"
+                />
               </a>
+    
             </div>
             <button
-              className="ml-4 text-white bg-gray-800 hover:bg-gray-700 pl-1 rounded"
+              className="text-white bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded transition-colors duration-300"
               onClick={handleClicklogout}
             >
               Log Out
@@ -116,7 +267,7 @@ const Navbar = () => {
           </div>
         ) : (
           <button
-            className="h-12 m-4 px-4 text-white bg-gray-800 hover:bg-gray-700  rounded"
+            className="text-white bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded transition-colors duration-300"
             onClick={handleClicklogin}
           >
             Log In

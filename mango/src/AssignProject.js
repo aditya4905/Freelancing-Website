@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Navbar from "./Navbar";
-
+import useAuth from "./useauth";
 const AssignProject = () => {
   
 
 
   const navigate = useNavigate();
   let [data, setData] = useState({});
-  const client = localStorage.getItem("user");
+  const { curr, whichUser, loading, setCurr, setWhichUser } = useAuth();
+  const client = curr;
   let { id } = useParams();
 
 

@@ -17,7 +17,7 @@ const RegisterClient = () => {
 
     try {
       console.log("hi");
-      const response = await fetch("http://localhost:5000/signupc", {
+      const response = await fetch("http://localhost:5000/signupclient", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

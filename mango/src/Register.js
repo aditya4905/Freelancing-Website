@@ -20,10 +20,8 @@ const Register = () => {
 
    const handleClick = async (e) => {
      e.preventDefault();
-
      try {
-       console.log("hi");
-       const response = await fetch("http://localhost:5000/signup", {
+       const response = await fetch("http://localhost:5000/signuplancer", {
          method: "POST",
          headers: {
            "Content-Type": "application/json",

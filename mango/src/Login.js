@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,17 +21,22 @@ const Login = () => {
         },
         body: JSON.stringify(formData), //send syntax
       });
-
+    
       const data = await response.json();
-      if (!response.ok || data.flag == 3 ) {
+      if (!response.ok || data.flag == 3) {
         alert(data.message);
         navigate("/login");
       } else {
-        localStorage.setItem("user", data.result.username);
-        localStorage.setItem("flag", data.flag);
-        // console.log(localStorage.getItem('user'));
-        const k = localStorage.getItem("user");
 
+        Cookies.set("jwt", data.token, { expires: 3 * 60 * 60 * 1000 });
+        const t = Cookies.get('jwt');
+        const r = await fetch("http://localhost:5000/decode",{
+          method : "post",
+          headers: {
+          "Content-Type": "application/json",
+          } ,
+          body: JSON.stringify({token : data.token}), //send syntax
+        })
         navigate("/home");
         alert(data.message);
       }

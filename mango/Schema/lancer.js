@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
 
 const lancer = new Schema({
@@ -35,6 +36,12 @@ const lancer = new Schema({
     required:true,
   }
 }, { timestamps: true });
-
+lancer.pre("save", async function (next) {
+  console.log
+  if(this.password.length>20){next();}
+  const salt = await bcrypt.genSalt();
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
 const l = mongoose.model('lancer', lancer);
 module.exports = l;
