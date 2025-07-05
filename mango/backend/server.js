@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 const jwt = require('jsonwebtoken');
+const http = require("http");
 // routes
-const chat = require("./routes/chats")
+
 const devroutes = require("./routes/developers")
 const loginroutes = require('./routes/login');
 const signuproutes = require('./routes/signupall');
@@ -14,21 +15,25 @@ const updateprofileroutes = require('./routes/updateprofile');
 const myprofileroutes = require('./routes/myprofile');
 const authroutes = require('./routes/authroutes');
 const notificationroutes = require('./routes/notifroutes');
-app.listen(5000, function () {
-  console.log("Listening on port 5000");
-});
+const setupRealtimeChat = require("./realtimechat");
+const paymentRoutes = require('./routes/payment');
+
 const url =
-  "mongodb+srv://malay:1234@cluster0.t0pj9ge.mongodb.net/tt?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://Shivam:3wrkC1O2FmdxCpgN@mango.dk09q.mongodb.net/?retryWrites=true&w=majority&appName=mango";
 mongoose
   .connect(url)
-  .then(() => console.log("Connected to database"))
+  .then(() => console.log(`Connected to database: ${mongoose.connection.name}`))
   .catch((error) => console.log(error));
+
+const server = http.createServer(app);
+setupRealtimeChat(server);
+
 app.use(cors());
 app.use(express.json());
 app.use(authroutes);
 app.use(signuproutes);
 app.set("views", "src");
-app.use(chat);
+app.use('/payment', paymentRoutes);
 app.use(loginroutes);
 app.use(raterouter);
 app.use(updateprofileroutes);
@@ -52,3 +57,9 @@ app.post('/decode',(req,res)=>{
   
   })
 })
+
+
+
+app.listen(5000, function () {
+  console.log("Listening on port 5000");
+});

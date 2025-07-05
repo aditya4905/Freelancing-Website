@@ -17,7 +17,7 @@ const RegisterClient = () => {
 
     try {
       console.log("hi");
-      const response = await fetch("http://localhost:5000/signupclient", {
+      const response = await fetch("https://man-go.onrender.com/signupclient", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

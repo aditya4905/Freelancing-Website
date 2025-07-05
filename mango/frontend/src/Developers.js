@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { useNavigate, useParams } from "react-router-dom";
-import Pro from "./user.png";
+
 
 const Developers = () => {
   const [items, setItems] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
-  const [rating2, setRating2] = useState(0);
+  // const [rating2, setRating2] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/developers/${id}`, {
+        const response = await fetch(`https://man-go.onrender.com/developers/${id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const Developers = () => {
                 <div className="card-body d-flex flex-column align-items-center">
                   <div className="d-flex flex-column align-items-center">
                     <img
-                      src={Pro}
+                      src='/images/user.png'
                       alt="User"
                       className="rounded-circle mb-2"
                       style={{

@@ -26,6 +26,7 @@ router.post("/accept" ,async (req,res)=>{
     let b = await lancer.findOneAndUpdate(
         {username : newproject.lancer_id},
         {$push : {project_ids : newproject._id}}
+         
     );
 })
 router.post('/fetchproject',async(req,res)=>{

@@ -1,33 +1,39 @@
-import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import React, { useState} from "react";
+import {  useNavigate, useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import useAuth from "./useauth";
+import RazorpayPayment from "./RazorpayPayment";
 const AssignProject = () => {
   
 
 
   const navigate = useNavigate();
   let [data, setData] = useState({});
-  const { curr, whichUser, loading, setCurr, setWhichUser } = useAuth();
+  const { curr} = useAuth();
   const client = curr;
   let { id } = useParams();
+  const[cost, setcost]= useState(0); 
+  const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
 
-
+  const handlePaymentSuccess = () => {
+    setIsPaymentSuccessful(true); // Enable the "Assign Project" button
+  };
   
   const handleClick = async (e) => {
-    console.log(id);
+
     data.lancer_id = id;
 
     data.client_id = client;
     let data2 = data;
     try {
       console.log(data2);
-      const response = await fetch("http://localhost:5000/signupp", {
+      const response = await fetch("https://man-go.onrender.com/signupp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data2), //send syntax
+  
       });
      
 
@@ -45,15 +51,11 @@ const AssignProject = () => {
     }
   };
 
-  
 
-
-
-  const [selectedCurrency, setSelectedCurrency] = useState("USD");
-  const handleCurrencyChange = (currency) => {
-    setSelectedCurrency(currency);
-  };
-
+  const handlecost=(e)=>{
+    setData({ ...data, [e.target.id]: e.target.value });
+    setcost(e.target.value);
+  }
 
   const handleInput = (e) => {
     setData({ ...data, [e.target.id]: e.target.value }); // Send the data to the backend ....
@@ -111,20 +113,11 @@ const AssignProject = () => {
                 id="cost"
                 className="border border-gray-300 rounded-l py-2 px-3 w-full"
                 placeholder="Enter project cost"
-                onChange={(e) => handleInput(e)}
+                onChange={(e) => handlecost(e)}
               />
               <div className="relative">
-                <select
-                  className="appearance-none border border-gray-300 rounded-r py-2 px-3 bg-white text-gray-700 font-semibold"
-                  value={selectedCurrency}
-                  onChange={(e) => handleCurrencyChange(e.target.value)}
-                >
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-                  <option value="INR">INR</option>
-                </select>
+                  <RazorpayPayment cost={cost}   onPaymentSuccess={handlePaymentSuccess}/>
               </div>
-
           </div>
         </div>
 
@@ -150,6 +143,7 @@ const AssignProject = () => {
           <button
             className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded   focus:outline-none focus:shadow-outline"
              onClick={handleClick}
+             disabled={!isPaymentSuccessful}             
           >
             Assign Project
           </button>

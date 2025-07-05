@@ -2,7 +2,6 @@
   "name": "mango",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://aditya4905.github.io/Freelancing-Website",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -14,6 +13,7 @@
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "mongoose": "^8.3.1",
+    "razorpay": "^2.9.5",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-cookie": "^7.1.4",
@@ -21,6 +21,8 @@
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "universal-cookie": "^7.1.4",
     "web-vitals": "^2.1.4"
   },

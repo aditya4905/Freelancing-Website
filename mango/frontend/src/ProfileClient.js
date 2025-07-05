@@ -12,7 +12,7 @@ const ProfileClient = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/myprofile/${id}`, {
+        const response = await fetch(`https://man-go.onrender.com/myprofile/${id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -24,8 +24,6 @@ const ProfileClient = () => {
 
         const data = await response.json();
         setEditedFields(data.result);
-        // editedFields.project_ids=data.result.project_ids;
-        // editedFields.skills=data.result.skills;
 
         console.log(editedFields.project_ids);
       } catch (error) {
@@ -52,7 +50,7 @@ const ProfileClient = () => {
       e.preventDefault();
 
       try {
-        const response = await fetch("http://localhost:5000/update", {
+        const response = await fetch("https://man-go.onrender.com/update", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

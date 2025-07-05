@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./Navbar";
-import useAuth from './useauth';
+import useAuth from "./useauth";
+
+
 const Profile = () => {
+
+
   const navigate = useNavigate();
   const { id } = useParams();
   const [edit, setEdit] = useState(false);
@@ -11,21 +15,24 @@ const Profile = () => {
     project_ids: [],
   });
   const { curr, whichUser, loading, setCurr, setWhichUser } = useAuth();
-  console.log(curr);
-  console.log(id);
-  if(curr!=id)
-  {
-    navigate('./');
+
+  if (curr != id) {
+    navigate("./");
   }
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/myprofile/${id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `https://man-go.onrender.com/myprofile/${id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
@@ -60,7 +67,7 @@ const Profile = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/update", {
+      const response = await fetch("https://man-go.onrender.com/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,161 +85,159 @@ const Profile = () => {
     navigate(`../myprofile/${id}`);
   };
 
-  
-
   return (
     <>
-    <Navbar />
-<div className="h-screen bg-gray-800 flex justify-center items-center">
-  <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-5/12">
-    <h2 className="text-2xl mb-4 font-bold text-gray-800">Profile</h2>
-    <div className="mb-4 flex items-center">
-      <label
-        className="text-gray-700 text-sm font-bold mr-2"
-        htmlFor="username"
-      >
-        Username:
-      </label>
-      <div className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
-        {editedFields.username}
-      </div>
-    </div>
-    <hr className="mb-4" />
-    <div className="mb-4 flex items-center">
-      <label
-        className="text-gray-700 text-sm font-bold mr-2"
-        htmlFor="name"
-      >
-        Name:
-      </label>
-      {edit ? (
-        <input
-          type="text"
-          id="name"
-          className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full"
-          value={editedFields.name}
-          onChange={handleFieldChange}
-        />
-      ) : (
-        <div className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
-          {editedFields.name}
-        </div>
-      )}
-    </div>
-    <hr className="mb-4" />
-    <div className="mb-4 flex items-center">
-      <label
-        className="text-gray-700 text-sm font-bold mr-2"
-        htmlFor="email"
-      >
-        Email:
-      </label>
-      {edit ? (
-        <input
-          type="text"
-          id="email"
-          className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full"
-          value={editedFields.email}
-          onChange={handleFieldChange}
-        />
-      ) : (
-        <div className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
-          {editedFields.email}
-        </div>
-      )}
-    </div>
-    <hr className="mb-4" />
-    {whichUser === 2 && (
-      <>
-        <div className="mb-4 flex items-center">
-          <label
-            className="text-gray-700 text-sm font-bold mr-2"
-            htmlFor="skills"
-          >
-            Skills:
-          </label>
-          {editedFields.skills && editedFields.skills.length > 0 ? (
-            edit ? (
+      <Navbar />
+      <div className="h-screen bg-gray-800 flex justify-center items-center">
+        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-5/12">
+          <h2 className="text-2xl mb-4 font-bold text-gray-800">Profile</h2>
+          <div className="mb-4 flex items-center">
+            <label
+              className="text-gray-700 text-sm font-bold mr-2"
+              htmlFor="username"
+            >
+              Username:
+            </label>
+            <div className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
+              {editedFields.username}
+            </div>
+          </div>
+          <hr className="mb-4" />
+          <div className="mb-4 flex items-center">
+            <label
+              className="text-gray-700 text-sm font-bold mr-2"
+              htmlFor="name"
+            >
+              Name:
+            </label>
+            {edit ? (
               <input
                 type="text"
-                id="skills"
+                id="name"
                 className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full"
-                value={editedFields.skills.join(", ")}
-                onChange={handleSkill}
+                value={editedFields.name}
+                onChange={handleFieldChange}
               />
             ) : (
               <div className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
-                {editedFields.skills.join(", ")}
+                {editedFields.name}
               </div>
-            )
-          ) : (
-            <span className="text-gray-700">Loading...</span>
+            )}
+          </div>
+          <hr className="mb-4" />
+          <div className="mb-4 flex items-center">
+            <label
+              className="text-gray-700 text-sm font-bold mr-2"
+              htmlFor="email"
+            >
+              Email:
+            </label>
+            {edit ? (
+              <input
+                type="text"
+                id="email"
+                className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full"
+                value={editedFields.email}
+                onChange={handleFieldChange}
+              />
+            ) : (
+              <div className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
+                {editedFields.email}
+              </div>
+            )}
+          </div>
+          <hr className="mb-4" />
+          {whichUser === 2 && (
+            <>
+              <div className="mb-4 flex items-center">
+                <label
+                  className="text-gray-700 text-sm font-bold mr-2"
+                  htmlFor="skills"
+                >
+                  Skills:
+                </label>
+                {editedFields.skills && editedFields.skills.length > 0 ? (
+                  edit ? (
+                    <input
+                      type="text"
+                      id="skills"
+                      className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full"
+                      value={editedFields.skills.join(", ")}
+                      onChange={handleSkill}
+                    />
+                  ) : (
+                    <div className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
+                      {editedFields.skills.join(", ")}
+                    </div>
+                  )
+                ) : (
+                  <span className="text-gray-700">Loading...</span>
+                )}
+              </div>
+              <hr className="mb-4" />
+              <div className="mb-4 flex items-center">
+                <label
+                  className="text-gray-700 text-sm font-bold mr-2"
+                  htmlFor="rating"
+                >
+                  Rating:
+                </label>
+                <div className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
+                  {editedFields.rating}
+                </div>
+              </div>
+              <hr className="mb-4" />
+            </>
           )}
-        </div>
-        <hr className="mb-4" />
-        <div className="mb-4 flex items-center">
-          <label
-            className="text-gray-700 text-sm font-bold mr-2"
-            htmlFor="rating"
-          >
-            Rating:
-          </label>
-          <div className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full">
-            {editedFields.rating}
+          <div className="mb-4 flex items-center">
+            <label
+              className="text-gray-700 text-sm font-bold mr-2"
+              htmlFor="projectID"
+            >
+              Project ID:
+            </label>
+            {editedFields.project_ids ? (
+              <div className="border-none bg-transparent leading-tight focus:outline-none focus:shadow-outline w-full">
+                {editedFields.project_ids.map((projectId, index) => (
+                  <span key={projectId}>
+                    <a
+                      id={`project_id_${index}`}
+                      className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline hover:text-1xl cursor-pointer"
+                      onClick={() => handleId(projectId)}
+                    >
+                      {projectId}
+                    </a>
+                    {index !== editedFields.project_ids.length - 1 && ", "}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <span className="text-gray-700">No projects assigned</span>
+            )}
+          </div>
+          <hr className="mb-4" />
+          <div className="flex items-center justify-between">
+            {edit ? (
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+                onClick={(e) => handleClick(e)}
+              >
+                Save Changes
+              </button>
+            ) : (
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+                onClick={() => setEdit(!edit)}
+              >
+                Edit
+              </button>
+            )}
           </div>
         </div>
-        <hr className="mb-4" />
-      </>
-    )}
-    <div className="mb-4 flex items-center">
-      <label
-        className="text-gray-700 text-sm font-bold mr-2"
-        htmlFor="projectID"
-      >
-        Project ID:
-      </label>
-      {editedFields.project_ids ? (
-        <div className="border-none bg-transparent leading-tight focus:outline-none focus:shadow-outline w-full">
-          {editedFields.project_ids.map((projectId, index) => (
-            <span key={projectId}>
-              <a
-                id={`project_id_${index}`}
-                className="border-none bg-transparent py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline hover:text-1xl cursor-pointer"
-                onClick={() => handleId(projectId)}
-              >
-                {projectId}
-              </a>
-              {index !== editedFields.project_ids.length - 1 && ", "}
-            </span>
-          ))}
-        </div>
-      ) : (
-        <span className="text-gray-700">No projects assigned</span>
-      )}
-    </div>
-    <hr className="mb-4" />
-    <div className="flex items-center justify-between">
-      {edit ? (
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="button"
-          onClick={(e) => handleClick(e)}
-        >
-          Save Changes
-        </button>
-      ) : (
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="button"
-          onClick={() => setEdit(!edit)}
-        >
-          Edit
-        </button>
-      )}
-    </div>
-  </div>
-</div>
-</>
+      </div>
+    </>
   );
 };
 

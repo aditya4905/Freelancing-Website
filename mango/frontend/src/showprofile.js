@@ -24,7 +24,7 @@ const ShowProfile = () => {
       try {
         let client = curr;
         let current_user = { client };
-        const response = await fetch(`http://localhost:5000/myprofile/${id}`, {
+        const response = await fetch(`https://man-go.onrender.com/myprofile/${id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -60,7 +60,7 @@ const ShowProfile = () => {
     let r = { rating, id, user };
 
     try {
-      await fetch("http://localhost:5000/rateit", {
+      await fetch("https://man-go.onrender.com/rateit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -224,7 +224,7 @@ const ShowProfile = () => {
           <hr className="mb-4" />
         </div>
       </div>
-      <ChatIcon />
+     {curr && (<ChatIcon />)}
     </>
   );
 };

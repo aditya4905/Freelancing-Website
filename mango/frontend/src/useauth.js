@@ -11,7 +11,7 @@ const useAuth = () => {
       const token = Cookies.get("jwt");
       if (token) {
         try {
-          const response = await fetch("http://localhost:5000/decode", {
+          const response = await fetch("https://man-go.onrender.com/decode", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

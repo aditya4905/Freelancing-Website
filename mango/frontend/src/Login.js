@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     try {
       // console.log("hi");
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch("https://man-go.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +30,7 @@ const Login = () => {
 
         Cookies.set("jwt", data.token, { expires: 3 * 60 * 60 * 1000 });
         const t = Cookies.get('jwt');
-        const r = await fetch("http://localhost:5000/decode",{
+        const r = await fetch("https://man-go.onrender.com/decode",{
           method : "post",
           headers: {
           "Content-Type": "application/json",

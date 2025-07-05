@@ -1,59 +1,51 @@
-// ChatBox.js
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import useAuth from "./useauth";
+import { io } from "socket.io-client";
+
 
 const ChatBox = ({ onClose }) => {
-  const { curr, whichUser, loading, setCurr, setWhichUser } = useAuth();
+  const { curr } = useAuth();
   const { id } = useParams();
-  const [chats, setChats] = useState([
-        {sender: "messi",
-        content: "i am best footballer"},
-        {
-            sender: "Ronaldo",
-            content: "Teri Maa ki ch***  i am best "   
-        },
-
-        {
-            sender: "Aditya",
-            content: "i am best"   
-        },
-
-        {
-          sender: "messi",
-          content: "i agree"
-        },
-        {
-                sender: "Ronaldo",
-                content: "i agree"   
-        },
-
-
-
-  ]);
+  const [chats, setChats] = useState([]);
   const [message, setMessage] = useState("");
-
+  const socket = io('https://man-go.onrender.com');
   useEffect(() => {
-    if(curr!=null)
-    fetchChats();
-  }, [curr]);
+    if (curr) {
 
+      fetchChats();
 
+      // Listen for real-time chat messages
+      socket.on("chatMessage", (newChat) => {
+        if (
+          (newChat.sender === curr && newChat.receiver === id) || 
+          (newChat.sender === id && newChat.receiver === curr)
+        ) {
+          setChats((prevChats) => [...prevChats, newChat]);
+        }
+      });
+
+      // Clean up socket listener
+      return () => {
+        socket.off("chatMessage");
+      };
+    }
+  }, [curr, id]);
 
   const fetchChats = async () => {
     try {
-      const response = await fetch('http://localhost:5000/getChats', {
-        method: 'POST',
+      const response = await fetch("https://man-go.onrender.com/getChats", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({curr,id}),
+        body: JSON.stringify({ curr, id }),
       });
 
       const data = await response.json();
       setChats(data);
     } catch (error) {
-      console.error('Error fetching chats:', error);
+      console.error("Error fetching chats:", error);
     }
   };
 
@@ -61,35 +53,38 @@ const ChatBox = ({ onClose }) => {
     if (message.trim() === "") return;
 
     const newChat = {
-      sender: curr, // Replace with the actual current user
+      sender: curr,
+      receiver: id,
       content: message,
     };
 
     try {
-      const response = await fetch('http://localhost:5000/addChat/'+id, {
-        method: 'POST',
+      // Emit the message to the WebSocket server
+      socket.emit("chatMessage", newChat);
+
+      // Persist the message to the backend
+      await fetch(`https://man-go.onrender.com/addChat/${id}`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(newChat),
       });
 
-      const savedChat = await response.json();
-      setChats([...chats,newChat]);
+      // Optimistically update the chat UI
+      setChats((prevChats) => [...prevChats, newChat]);
       setMessage("");
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
     }
   };
-
-  
 
   return (
     <div className="fixed bottom-4 right-4 w-80 bg-white rounded-lg shadow-lg overflow-hidden">
       <div className="bg-teal-400 text-white py-2 px-4 flex justify-between items-center">
         <h2 className="text-lg font-semibold">Chat</h2>
         <button onClick={onClose} className="text-white">
-          &times;  
+          &times;
         </button>
       </div>
       <div className="p-4 h-64 overflow-y-scroll">

@@ -11,6 +11,7 @@ import ProfileClient from "./ProfileClient";
 import AssignProject from "./AssignProject";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ViewProject from "./ViewProject";
+import Matchfreelancer from "./Matchfreelancer";
 
 
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="/profile/:id" element={<ShowProfile />}></Route>
         <Route path="/home" element={<Home />}></Route>
         <Route path="/" element={<Home />}></Route>
+        <Route path="/Matchfreelancer" element={<Matchfreelancer/>}></Route>
         <Route path="/developers/:id" element={<Developers />}></Route>
       </Routes>
     </BrowserRouter>

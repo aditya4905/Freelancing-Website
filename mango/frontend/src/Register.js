@@ -21,7 +21,7 @@ const Register = () => {
    const handleClick = async (e) => {
      e.preventDefault();
      try {
-       const response = await fetch("http://localhost:5000/signuplancer", {
+       const response = await fetch("https://man-go.onrender.com/signuplancer", {
          method: "POST",
          headers: {
            "Content-Type": "application/json",

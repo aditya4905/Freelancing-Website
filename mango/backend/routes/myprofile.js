@@ -3,6 +3,9 @@ const lancer = require("../Schema/lancer");
 const client = require("../Schema/client");
 const rated = require("../Schema/rated");
 const router = express.Router();
+
+
+
 router.post("/myprofile/:user", async (req, res) => {
   const url = req.url;
   let id = "";
@@ -11,7 +14,7 @@ router.post("/myprofile/:user", async (req, res) => {
     else id += url[i];
   }
   const username = id;
-  // console.log(username);
+
   let tem = req.body.client;
   let r;
   if (tem) r = await rated.findOne({ client: tem, lancer: id });
@@ -42,7 +45,6 @@ router.post("/myprofile/:user", async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).send({
       message: "Internal Server Error",
     });

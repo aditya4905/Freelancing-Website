@@ -10,7 +10,7 @@ const ViewProject = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/getproject/${id}`, {
+        const response = await fetch(`https://man-go.onrender.com/getproject/${id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

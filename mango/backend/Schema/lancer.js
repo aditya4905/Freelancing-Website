@@ -34,10 +34,14 @@ const lancer = new Schema({
   email:{
     type:String,
     required:true,
-  }
+  },
+  availability:{
+    type:Boolean,
+    required:false,
+  },
+
 }, { timestamps: true });
 lancer.pre("save", async function (next) {
-  console.log
   if(this.password.length>20){next();}
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
